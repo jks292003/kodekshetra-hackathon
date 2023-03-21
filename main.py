@@ -3,9 +3,12 @@ import streamlit as st
 from datetime import datetime
 
 
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
-
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +
+                                     'haarcascade_frontalface_default.xml')
+eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +
+                                    'haarcascade_eye.xml')
+# mouth_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +
+#                                       'haarcascade_smile.xml')
 st.title("Motion Detector")
 start = st.button("Start Camera")
 
@@ -23,12 +26,19 @@ if start:
             roi_gray = gray[y:y + w, x:x + w]
             roi_color = frame[y:y + h, x:x + w]
             eyes = eye_cascade.detectMultiScale(roi_gray, 1.3, 5)
+            # mouth = mouth_cascade.detectMultiScale(roi_gray, 1.3, 5)
 
             if len(eyes) > 0:
                 eyes_detected = True
                 for (ex, ey, ew, eh) in eyes:
                     cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh),
                                   (0, 255, 0), 5)
+
+            # if len(mouth) > 0:
+            #     mouth_detected = True
+        # for (mx, my, mw, mh) in mouth:
+        #     cv2.rectangle(roi_color, (mx, my), (mx + mw, my + mh),
+        #                   (0, 255, 0), 5)
 
         print(eyes_detected)
         if cv2.waitKey(1) == ord('q'):
